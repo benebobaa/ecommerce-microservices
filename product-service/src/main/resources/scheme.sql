@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS products;
+
 CREATE TABLE IF NOT EXISTS
     products (
     id BIGSERIAL PRIMARY KEY,

@@ -1,0 +1,25 @@
+### GET request to example server
+GET https://examples.http-client.intellij.net/get
+    ?generated-in=IntelliJ IDEA
+
+### POST DATA ORDER
+POST http://localhost:8082/api/orders
+Content-Type: application/json
+
+{
+  "order": {
+    "customerId": 2,
+    "billingAddress": "COBA DEH",
+    "shippingAddress": "tebet",
+    "paymentMethod": "bri"
+  },
+  "orderItems" : [
+    {
+      "productId": 1,
+      "quantity": 2
+    }
+  ]
+}
+
+### GET
+GET http://localhost:8082/api/orders

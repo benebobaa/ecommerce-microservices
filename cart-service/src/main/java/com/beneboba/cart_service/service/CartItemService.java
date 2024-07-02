@@ -1,5 +1,6 @@
 package com.beneboba.cart_service.service;
 
+import com.beneboba.cart_service.client.ProductClient;
 import com.beneboba.cart_service.exception.CartNotFound;
 import com.beneboba.cart_service.model.BaseResponse;
 import com.beneboba.cart_service.model.CartItem;
@@ -24,18 +25,21 @@ public class CartItemService {
 
     private final ValidationService validationService;
 
+    private final ProductClient productClient;
+
     public Mono<BaseResponse<CartItem>> createCartItem(CartItem request) {
         log.info("createCartItem -> " + request);
 
         validationService.validate(request);
 
-        // Find the cart by ID and chain the save operation
-        return cartRepository.findById(request.getCartId())
-                .switchIfEmpty(Mono.error(new CartNotFound(String.format("Cart not found. ID: %s", request.getCartId()))))
-                .flatMap(cart -> {
-                    log.info("createCartItem -> cart found");
-                    Mono<CartItem> cartItem = cartItemRepository.save(request);
-                    return cartItem.map(savedCartItem -> new BaseResponse<>(savedCartItem, null));
-                });
+        return productClient.getProductById(request.getProductId())
+                .flatMap(product -> cartRepository.findById(request.getCartId())
+                        .switchIfEmpty(Mono.error(new CartNotFound(String.format("Cart not found. ID: %s", request.getCartId()))))
+                        .flatMap(cart -> {
+                            log.info("createCartItem -> cart found");
+                            return cartItemRepository.save(request)
+                                    .map(savedCartItem -> new BaseResponse<>(savedCartItem, null));
+                        }))
+                .doOnError(throwable -> log.error("createCartItem error -> " + throwable.getMessage()));
     }
- }
+}

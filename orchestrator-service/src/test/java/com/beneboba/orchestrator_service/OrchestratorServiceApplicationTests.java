@@ -1,10 +1,10 @@
-package com.beneboba.order_service;
+package com.beneboba.orchestrator_service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class OrderServiceApplicationTests {
+class OrchestratorServiceApplicationTests {
 
 	@Test
 	void contextLoads() {

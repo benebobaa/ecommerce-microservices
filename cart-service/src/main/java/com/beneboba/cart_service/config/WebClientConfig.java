@@ -1,4 +1,4 @@
-package com.beneboba.cart_service;
+package com.beneboba.cart_service.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -9,10 +9,12 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class WebClientConfig {
 
     @Value("${service.api.product.url}")
-    private String productServiceUrl;
+    private String productUrl;
 
     @Bean
-    public WebClient.Builder webClientBuilder() {
-        return WebClient.builder().baseUrl(productServiceUrl);
+    public WebClient webClient() {
+        return WebClient.builder()
+                .baseUrl(productUrl)
+                .build();
     }
 }

@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/products")
 @RequiredArgsConstructor
@@ -28,10 +30,12 @@ public class ProductController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Flux<BaseResponse<Product>> getAllProducts() {
+    public Mono<BaseResponse<List<Product>>> getAllProducts() {
         log.info("getAllProducts");
 
-        return productService.getAllProducts();
+        return productService.getAllProducts()
+                .collectList()
+                .map(products -> new BaseResponse<>(products, null));
     }
 
     @PatchMapping
